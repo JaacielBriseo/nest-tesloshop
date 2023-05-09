@@ -56,6 +56,7 @@ export class Product {
   //* OneToMany: One Product can have Many images
   @OneToMany(() => ProductImage, ({ product }) => product, {
     cascade: true,
+    eager: true,
   })
   images?: ProductImage[];
 
