@@ -10,6 +10,6 @@ export class ProductImage {
   url: string;
 
   //* ManyToOne: Many images can have one product
-  @ManyToOne(() => Product, ({ images }) => images)
+  @ManyToOne(() => Product, ({ images }) => images, { onDelete: 'CASCADE' })
   product: Product;
 }

@@ -8,5 +8,11 @@ import { ProductsController } from './products.controller';
   controllers: [ProductsController],
   providers: [ProductsService],
   imports: [TypeOrmModule.forFeature([Product, ProductImage])],
+  exports: [
+    ProductsService,
+    // Is typical that we need to use a repository (in this case Product and ProductImage repositories)
+    // In an external module, so we can export it and use it anywhere we need
+    TypeOrmModule,
+  ],
 })
 export class ProductsModule {}
