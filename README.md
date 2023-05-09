@@ -7,9 +7,11 @@
 1. Clone repository
 
 2. Install node modules
+
 ```
 yarn install
 ```
+
 3. Rename **.env.template** to **.env**
 
 4. Fill env variables
@@ -20,7 +22,13 @@ yarn install
 docker-compose up -d
 ```
 
-6. Run db
+6. Execute seed
+
+```
+/api/seed
+```
+
+7. Run db
 
 ```
 yarn start:dev
