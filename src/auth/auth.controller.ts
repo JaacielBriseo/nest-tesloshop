@@ -1,19 +1,8 @@
-import {
-  Controller,
-  Post,
-  Body,
-  Get,
-  UseGuards,
-  Req,
-  SetMetadata,
-} from '@nestjs/common';
-import { AuthService } from './auth.service';
+import { Controller, Post, Body, Get } from '@nestjs/common';
 import { CreateUserDto, LoginUserDto } from './dto';
-import { AuthGuard } from '@nestjs/passport';
 import { User } from './entities/user.entity';
-import { Auth, GetUser, RawHeaders, RoleProtected } from './decorators';
-import { UserRoleGuard } from './guards/user-role.guard';
-import { ValidRoles } from './interfaces';
+import { AuthService } from './auth.service';
+import { Auth, GetUser } from './decorators';
 
 @Controller('auth')
 export class AuthController {
@@ -29,40 +18,46 @@ export class AuthController {
     return this.authService.login(loginUserDto);
   }
 
-  @Get('private')
-  @UseGuards(AuthGuard())
-  testingPrivateRoute(
-    @GetUser() user: User,
-    @GetUser('email') userEmail: string,
-    @Req() request: Express.Request,
-    @RawHeaders() rawHeaders: string[],
-  ) {
-    console.log({ request });
-    return {
-      ok: true,
-      msg: 'Hello world from private',
-      user,
-      userEmail,
-      rawHeaders,
-    };
+  @Get('check-status')
+  @Auth()
+  checkAuthStatus(@GetUser() user: User) {
+    return this.authService.checkAuthStatus(user);
   }
 
-  @Get('private2')
-  @RoleProtected(ValidRoles.superUser)
-  @UseGuards(AuthGuard(), UserRoleGuard)
-  privateRoute2(@GetUser() user: User) {
-    return {
-      ok: true,
-      user,
-    };
-  }
+  // @Get('private')
+  // @UseGuards(AuthGuard())
+  // testingPrivateRoute(
+  //   @GetUser() user: User,
+  //   @GetUser('email') userEmail: string,
+  //   @Req() request: Express.Request,
+  //   @RawHeaders() rawHeaders: string[],
+  // ) {
+  //   console.log({ request });
+  //   return {
+  //     ok: true,
+  //     msg: 'Hello world from private',
+  //     user,
+  //     userEmail,
+  //     rawHeaders,
+  //   };
+  // }
 
-  @Get('private3')
-  @Auth(ValidRoles.admin, ValidRoles.superUser)
-  privateRoute3(@GetUser() user: User) {
-    return {
-      ok: true,
-      user,
-    };
-  }
+  // @Get('private2')
+  // @RoleProtected(ValidRoles.superUser)
+  // @UseGuards(AuthGuard(), UserRoleGuard)
+  // privateRoute2(@GetUser() user: User) {
+  //   return {
+  //     ok: true,
+  //     user,
+  //   };
+  // }
+
+  // @Get('private3')
+  // @Auth(ValidRoles.admin, ValidRoles.superUser)
+  // privateRoute3(@GetUser() user: User) {
+  //   return {
+  //     ok: true,
+  //     user,
+  //   };
+  // }
 }
